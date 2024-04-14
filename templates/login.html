@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %} Login Page {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #536dfe, #8c9eff);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+</style>
+    <div class="container-fluid">
+        <div class="container text-center mt-4 mb-2 text-light ">
+            <div class="marquee">
+                <h5>Welcome to</h5>
+                <h4>Students Attendance System</h4>
+                <h6>Smart Attendance System with Face Recognition</h6>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center mt-2" >
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Login</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <a class="btn btn-link btn-block" href="{% url 'password_reset' %}">Forgot Password?</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+{% endblock %}

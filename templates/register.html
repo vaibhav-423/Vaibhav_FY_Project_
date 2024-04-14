@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} Register Page {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #536dfe, #8c9eff);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+</style>
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center p-2" >
+            <div class="col-md-6">
+                <div class="card border bg-white">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Register Here</h3>
+                        <hr>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button class="btn btn-outline-info btn-block" type="submit">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

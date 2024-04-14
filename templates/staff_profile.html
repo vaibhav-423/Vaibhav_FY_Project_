@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Student Page{% endblock %}
+
+{% block content %}
+<style>
+    /* Additional CSS for styling */
+    body {
+        background-color: #f5f5f5;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        font-family: Arial, sans-serif;
+        width: 100vw;
+        overflow-x: hidden;
+    }
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        border: none;
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+        animation: slide-in 0.5s ease; /* Animation when page loads */
+    }
+    @keyframes slide-in {
+        0% { transform: translateY(-50px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .card-header {
+        border-radius: 20px 20px 0 0;
+        /* background-color: #007bff; */
+        color: #ffffff;
+        font-weight: bold;
+        padding: 20px;
+        text-align: center;
+    }
+    .profile-info {
+        padding: 20px;
+    }
+    .btn-info {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #ffffff;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-info:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    .img-thumbnail {
+        max-width: 100%;
+        height: auto;
+        border-radius: 20px;
+        border: 2px solid #ffffff;
+        transition: transform 0.3s ease;
+        display: block;
+        margin: 0 auto; /* Center the image horizontally */
+    }
+    .img-thumbnail:hover {
+        transform: scale(1.05);
+    }
+    .marquee-content {
+        color: #020300;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: marquee 10s linear infinite;
+    }
+    @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    .img-thumbnail{
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        border: 2px solid gray;
+    }
+    .Attendence{
+        text-decoration: none;
+    }
+</style>
+<div class="row my-4">
+    <div class="col-md-8" style="margin: auto;">
+        <div class="card">
+            <div class="card-header bg-info text-white row">
+                Student's Profile
+            </div>
+            <div class="row p-3 detile">
+                <div class="col-md-4">
+                    <img class="img-thumbnail" src="{{user.profile.image.url}}" alt="">
+                    <p></p>
+                    <a  class="Attendence" href="{% url 'view-attendance' user.username %}">View This Month's Attendance Statistics</a>
+                    {% if message %}
+                    <h5>{{message}}</h5>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <span class="h4">Profile Information</span>
+                    <a class="btn btn-info btn-sm float-right" href="{% url 'profile-update-admin' user.username %}">Edit</a>
+                    <hr>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{user.username}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>{{user.email}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>{{user.profile.phone}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>{{user.profile.address}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3" style="justify-content:center; align-items: center; margin: auto;">
+            {% if message_profile %}
+            <marquee class="text-center p-3" direction="up" style="color:rgb(7, 8, 8)">
+                {% for msg in message_profile %}
+                <h5>{{msg}}</h5>
+                {% endfor %}
+            </marquee>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

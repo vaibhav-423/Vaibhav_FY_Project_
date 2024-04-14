@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Page{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    /* Additional CSS for styling */
+    body {
+        background: linear-gradient(to right, #536dfe, #8c9eff);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .btn-success {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    hr {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: 0;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+
+<div class="row my-4">
+    <div class="col-md-8" style="margin: auto;">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                Teacher Detail Page
+            </div>
+            <div class="row p-3">
+                <div class="col-md-8">
+                    <h4>Profile Information</h4>
+                    <hr>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ user_form|crispy }}
+                        {{ profile_form|crispy }}
+                        <input class="btn btn-success" type="submit" value="Update">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

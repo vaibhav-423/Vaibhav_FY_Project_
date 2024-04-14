@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Delete Page{% endblock %}
+{% block content %}
+<style>
+    body{
+        background: linear-gradient(to right, #536dfe, #8c9eff);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+</style>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Delete Attendance</h3>
+                    <hr>
+                    <div class="alert alert-danger text-center">
+                        <h4>Are you sure you want to delete?</h4>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form }}
+                        <div class="d-flex justify-content-center mt-4">
+                            <a class="btn btn-secondary mr-2" href="{% url 'attendance-admin' %}">Cancel</a>
+                            <input class="btn btn-danger" type="submit" value="Confirm">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

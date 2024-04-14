@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% block title %}Student Page{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    body {
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+    }
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        
+        margin-top: 30px;
+        margin-bottom: 20px;
+        animation: slideInUp 1s ease;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+        text-align: center;
+    }
+    .card-header {
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 20px 20px 0 0;
+        padding: 15px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #218838;
+    }
+    #myChart {
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="row my-4">
+        <div class="col-md-4">
+
+            <div class="card">
+                <div class="card-header">
+                    Select a date to see that month's attendance
+                </div>
+                <div class="card-body">
+                    {% if form %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input class="btn btn-success btn-block" type="submit" value="Search">
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-8">
+            <div class="bg-white">
+                <canvas id="myChart" width="400" height="230"></canvas>
+                {% if data2_ %}
+                <script>
+                    var data_ = JSON.parse("{{data2|escapejs}}");
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data_[2],
+                            datasets: [{
+                                label: 'Days->Present',
+                                data: data_[0],
+                                lineTension: 0,
+                                fill: false,
+                                borderColor: 'rgba(75, 192, 192, 1)'
+                            },
+                            {
+                                label: 'Days->Absent',
+                                data: data_[1],
+                                lineTension: 0,
+                                fill: false,
+                                borderColor: 'rgba(255, 99, 132, 1)'
+                            }]
+                        },
+                        plugins: [ChartDataLabels],
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Days'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Weeks of the Present Month'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {},
+                                title: {
+                                    text: 'Your Attendance History for This Month',
+                                    display: true
+                                },
+                                datalabels: {
+                                    formatter: function(value, context) {
+                                        var index = context.dataIndex;
+                                        var val1 = context.chart.data.datasets[0].data[index];
+                                        var val2 = context.chart.data.datasets[1].data[index];
+                                        if (val1 === 0 & val2 === 0) {
+                                            return "\t\t\t\tNo\nattendance\n\t\t\t\ttaken\n\n\n";
+                                        }
+                                    },
+                                    anchor: 'center',
+                                    align: function(context) {
+                                        var ind = context.dataIndex;
+                                        if (ind === 3) {
+                                            return 'left';
+                                        } else {
+                                            return 'right';
+                                        }
+                                    },
+                                    color: 'red',
+                                    display: 'auto'
+                                },
+                            }
+                        }
+                    });
+                </script>
+                {% endif %}
+                {% if data1_ %}
+                <script>
+                    var dataa = JSON.parse("{{data1|escapejs}}");
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dataa[2],
+                            datasets: [{
+                                label: 'Days->Present',
+                                data: dataa[0],
+                                lineTension: 0,
+                                fill: false,
+                                borderColor: 'rgba(75, 192, 192, 1)'
+                            },
+                            {
+                                label: 'Days->Absent',
+                                data: dataa[1],
+                                lineTension: 0,
+                                fill: false,
+                                borderColor: 'rgba(255, 99, 132, 1)'
+                            }]
+                        },
+                        plugins: [ChartDataLabels],
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Days'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Weeks of the Selected Month'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {},
+                                title: {
+                                    text: 'Your Attendance History for The Selected Month',
+                                    display: true
+                                },
+                                datalabels: {
+                                    formatter: function(value, context) {
+                                        var index = context.dataIndex;
+                                        var val1 = context.chart.data.datasets[0].data[index];
+                                        var val2 = context.chart.data.datasets[1].data[index];
+                                        if (val1 === 0 & val2 === 0) {
+                                            return "\t\t\t\tNo\nattendance\n\t\t\t\ttaken\n\n\n";
+                                        }
+                                    },
+                                    anchor: 'center',
+                                    align: function(context) {
+                                        var ind = context.dataIndex;
+                                        if (ind === 3) {
+                                            return 'left';
+                                        } else {
+                                            return 'right';
+                                        }
+                                    },
+                                    color: 'red',
+                                    display: 'auto'
+                                },
+                            }
+                        }
+                    });
+                </script>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<!-- Top navigation inclusion for consistent site navigation -->
+{% include 'topnav.html' %}
+
+<!-- Main content area for visualizing attendance data -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Chart for displaying attendance percentages -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Monthly Attendance Record</h5>
+                    <canvas id="attendancePieChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart for displaying detailed attendance -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Weekly Attendance Record</h5>
+                    <canvas id="attendanceBarChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles for the charts -->
+<style>
+    body {
+        background: linear-gradient(to right, #536dfe, #8c9eff);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 15px;
+        background-color: #fff;
+    }
+
+    canvas {
+        max-width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        color: #333;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+</style>
+
+<!-- JavaScript for charts (Include Chart.js library) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+<script>
+    // Mock data for demonstration
+    const pieChartData = {
+        labels: ['Present', 'Absent', 'Late'],
+        datasets: [{
+            label: 'Attendance Distribution',
+            data: [75, 15, 10],
+            backgroundColor: ['#36a2eb', '#ff6384', '#ff9f40'],
+            borderColor: ['#36a2eb', '#ff6384', '#ff9f40'],
+            borderWidth: 1
+        }]
+    };
+
+    const barChartData = {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        datasets: [{
+            label: 'Present',
+            data: [30, 35, 40, 45, 50],
+            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Absent',
+            data: [5, 8, 3, 7, 2],
+            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    // Initialize charts
+    const pieCtx = document.getElementById('attendancePieChart').getContext('2d');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: pieChartData,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Attendance Distribution',
+                    fontSize: 18,
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    const barCtx = document.getElementById('attendanceBarChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Weekly Attendance Record',
+                    fontSize: 18,
+                    padding: 20
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            scales: {
+                y: {
+                    grace: '5%',
+                    title: {
+                        display: true,
+                        text: 'Number of Students',
+                        fontSize: 14
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Days of the Week',
+                        fontSize: 14
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
